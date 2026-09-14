@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-09-14
+
 ### Fixed
 
 - Reject destinations inside the bundled starter before creating files.
