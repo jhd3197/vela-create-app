@@ -63,6 +63,9 @@ def main():
                 subprocess.run(['node', '--check', str(package / 'vela.js')], check=True)
                 assert not (package / 'host.js').exists()
             else:
+                nested = package / 'templates/notebook/generated'
+                rejected = subprocess.run(['node', str(package / 'cli.mjs'), 'nested-app', str(nested)], capture_output=True)
+                assert rejected.returncode != 0 and not nested.exists(), 'Generator wrote into its own starter'
                 for mode in ('hub', 'compact', 'seamless'):
                     app = work / mode
                     subprocess.run(['node', str(package / 'cli.mjs'), 'my-' + mode, str(app), mode], check=True)
