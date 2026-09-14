@@ -1,0 +1,5 @@
+{
+  "repository": "vela-create-app",
+  "kind": "npm",
+  "version_file": "package.json"
+}
