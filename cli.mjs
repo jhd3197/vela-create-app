@@ -10,6 +10,13 @@ const here=path.dirname(fileURLToPath(import.meta.url));
 const starter=path.join(here,'templates/notebook');
 const target=path.resolve(destination);
 try {
+  // Resolve the parent before writing so aliases cannot put generated files
+  // inside the bundled starter that is being copied.
+  const resolvedTarget=path.join(await fs.realpath(path.dirname(target)),path.basename(target));
+  const relative=path.relative(await fs.realpath(starter),resolvedTarget);
+  if (relative === '' || (!path.isAbsolute(relative) && relative !== '..' && !relative.startsWith('..'+path.sep))) {
+    throw new Error('Choose a destination outside the bundled starter directory.');
+  }
   await fs.mkdir(target); // Refuse every existing destination, including empty folders.
   // Reserve the destination atomically, then copy into new child paths. Some
   // Node versions reject fs.cp(source, existingDirectory, {errorOnExist:true}).

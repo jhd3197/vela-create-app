@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Reject destinations inside the bundled starter before creating files.
+
 - Generate into a new directory consistently on Windows and Linux while refusing existing destinations.
 
 ### Added
