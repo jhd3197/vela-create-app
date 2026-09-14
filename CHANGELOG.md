@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Generate into a new directory consistently on Windows and Linux while refusing existing destinations.
+
 ### Added
 
 - Create a Vela app from a portable, revision-safe starter.

@@ -11,7 +11,11 @@ const starter=path.join(here,'templates/notebook');
 const target=path.resolve(destination);
 try {
   await fs.mkdir(target); // Refuse every existing destination, including empty folders.
-  await fs.cp(starter,target,{recursive:true,errorOnExist:true,force:false});
+  // Reserve the destination atomically, then copy into new child paths. Some
+  // Node versions reject fs.cp(source, existingDirectory, {errorOnExist:true}).
+  for (const entry of await fs.readdir(starter)) {
+    await fs.cp(path.join(starter,entry),path.join(target,entry),{recursive:true,errorOnExist:true,force:false});
+  }
   const manifest=JSON.parse(await fs.readFile(path.join(target,'app.json'),'utf8'));
   manifest.id=id;manifest.name=id.split('-').map(word=>word[0].toUpperCase()+word.slice(1)).join(' ');manifest.view.chrome=chrome;
   await fs.writeFile(path.join(target,'app.json'),JSON.stringify(manifest,null,2)+'\n');
